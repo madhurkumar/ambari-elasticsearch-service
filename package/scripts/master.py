@@ -76,6 +76,15 @@ class Master(Script):
         cmd = format("cd {elastic_base_dir}; tar -xf elasticsearch.tar.gz --strip-components=1")
         Execute(cmd, user=params.elastic_user)
 
+        # Attempt to remove X-Pack plugin
+        cmd = format("{elastic_base_dir}/bin/elasticsearch-plugin remove x-pack")
+        Execute(cmd)
+
+        # Install X-Pack plugin
+        cmd = format("{elastic_base_dir}/bin/elasticsearch-plugin install x-pack")
+        Execute(cmd)
+
+
         # Ensure all files owned by elasticsearch user
         cmd = format("chown -R {elastic_user}:{elastic_group} {elastic_base_dir}")
         Execute(cmd)
@@ -107,14 +116,6 @@ class Master(Script):
         # Install HEAD and HQ puglins - these plugins are not currently supported by ES 5.x
         #cmd = format("{elastic_base_dir}/bin/elasticsearch-plugin install mobz/elasticserach-head")
         #Execute(cmd)
-
-        # Attempt to remove X-Pack plugin
-        cmd = format("{elastic_base_dir}/bin/elasticsearch-plugin remove x-pack")
-        Execute(cmd)
-
-        # Install X-Pack plugin
-        cmd = format("{elastic_base_dir}/bin/elasticsearch-plugin install x-pack")
-        Execute(cmd)
 
         # Ensure all files owned by elasticsearch user
         cmd = format("chown -R {elastic_user}:{elastic_group} {elastic_base_dir}")

@@ -36,7 +36,7 @@ elastic_pid_dir = config['configurations']['elastic-env']['elastic_pid_dir']
 elastic_pid_file = format("{elastic_pid_dir}/elasticsearch.pid")
 
 elastic_install_log = elastic_base_dir + '/elasticsearch-install.log'
-elastic_download = 'https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.2.0.tar.gz'
+elastic_download = 'https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.2.2.tar.gz'
 
 cluster_name = config['configurations']['elastic-config']['cluster_name']
 hostname = config['hostname']
@@ -69,6 +69,13 @@ gateway_recover_after_nodes = config['configurations']['elastic-config']['gatewa
 node_max_local_storage_nodes = config['configurations']['elastic-config']['node_max_local_storage_nodes']
 
 action_destructive_requires_name = str(config['configurations']['elastic-config']['action_destructive_requires_name'])
+
+xpack_security_ssl_enabled=str(config['configurations']['elastic-config']['xpack_security_ssl_enabled'])
+xpack_security_ssl_key=str(config['configurations']['elastic-config']['xpack_security_ssl_key'])
+xpack_security_ssl_cert=str(config['configurations']['elastic-config']['xpack_security_ssl_cert'])
+xpack_security_ssl_cert_authority=str(config['configurations']['elastic-config']['xpack_security_ssl_cert_authority'])
+xpack_security_ad_domain_name=str(config['configurations']['elastic-config']['xpack_security_ad_domain_name'])
+xpack_security_ad_url=str(config['configurations']['elastic-config']['xpack_security_ad_url'])
 
 # Elasticsearch expecgts boolean values to be true or false and will generate an error if you use True or False.
 if action_destructive_requires_name == 'True':

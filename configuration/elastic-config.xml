@@ -101,4 +101,34 @@
         <value>false</value>
         <description>Enable X-Pack security module</description>
     </property>
+    <property>
+        <name>xpack_security_ssl_enabled</name>
+        <value>false</value>
+        <description>Elasticsearch SSL support</description>
+    </property>
+    <property>
+        <name>xpack_security_ssl_key</name>
+        <value/>
+        <description>Elasticsearch SSL key</description>
+    </property>
+    <property>
+        <name>xpack_security_ssl_cert</name>
+        <value/>
+        <description>Elasticsearch SSL certificate</description>
+    </property>
+    <property>
+        <name>xpack_security_ssl_cert_authority</name>
+        <value/>
+        <description>Elasticsearch SSL certificate authority</description>
+    </property>
+    <property>
+        <name>xpack_security_ad_domain_name</name>
+        <value/>
+        <description>Elasticsearch AD support</description>
+    </property>
+    <property>
+        <name>xpack_security_ad_url</name>
+        <value/>
+        <description>Elasticsearch AD url</description>
+    </property>
 </configuration>
