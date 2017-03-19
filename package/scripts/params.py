@@ -37,6 +37,7 @@ elastic_pid_file = format("{elastic_pid_dir}/elasticsearch.pid")
 
 elastic_install_log = elastic_base_dir + '/elasticsearch-install.log'
 elastic_download = 'https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.2.2.tar.gz'
+xpack_download='https://artifacts.elastic.co/downloads/packs/x-pack/x-pack-5.2.2.zip'
 
 cluster_name = config['configurations']['elastic-config']['cluster_name']
 hostname = config['hostname']

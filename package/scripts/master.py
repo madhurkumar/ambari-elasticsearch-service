@@ -76,8 +76,12 @@ class Master(Script):
         cmd = format("cd {elastic_base_dir}; tar -xf elasticsearch.tar.gz --strip-components=1")
         Execute(cmd, user=params.elastic_user)
 
+        # Download Elasticsearch
+        cmd = format("cd {elastic_base_dir}; wget {xpack_download} -O x-pack.zip -a {elastic_install_log}")
+        Execute(cmd, user=params.elastic_user)
+
         # Install X-Pack plugin
-        cmd = format("{elastic_base_dir}/bin/elasticsearch-plugin install x-pack")
+        cmd = format("cd {elastic_base_dir}; bin/elasticsearch-plugin install file://{elastic_base_dir}/x-pack.zip")
         Execute(cmd)
 
 
