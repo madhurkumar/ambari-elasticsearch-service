@@ -113,12 +113,12 @@
     </property>
     <property>
         <name>xpack_security_ssl_cert</name>
-        <value>host_ssl.cert</value>
+        <value>host_ssl.crt</value>
         <description>Elasticsearch SSL certificate</description>
     </property>
     <property>
         <name>xpack_security_ssl_cert_authority</name>
-        <value>ca.cert</value>
+        <value>ca.crt</value>
         <description>Elasticsearch SSL certificate authority</description>
     </property>
     <property>

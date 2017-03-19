@@ -76,10 +76,6 @@ class Master(Script):
         cmd = format("cd {elastic_base_dir}; tar -xf elasticsearch.tar.gz --strip-components=1")
         Execute(cmd, user=params.elastic_user)
 
-        # Attempt to remove X-Pack plugin
-        cmd = format("{elastic_base_dir}/bin/elasticsearch-plugin remove x-pack")
-        Execute(cmd)
-
         # Install X-Pack plugin
         cmd = format("{elastic_base_dir}/bin/elasticsearch-plugin install x-pack")
         Execute(cmd)
