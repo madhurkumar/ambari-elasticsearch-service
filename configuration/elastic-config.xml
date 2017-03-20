@@ -20,6 +20,7 @@
     <property>
         <name>cluster_name</name>
         <value>my_es_cluster</value>
+        <display-name>Cluster name</display-name>
         <description>Use a descriptive name for your cluster</description>
     </property>
 
@@ -27,6 +28,7 @@
     <property>
         <name>node_attr_rack</name>
         <value>rack01</value>
+        <display-name>Rack name</display-name>
         <description>Add custom attributes to the node</description>
     </property>
 
@@ -34,12 +36,14 @@
     <property>
         <name>path_data</name>
         <value>/opt/elasticsearch/data</value>
+        <display-name>Data path</display-name>
         <description>Path to directory where to store the data (separate multiple locations by comma)</description>
     </property>
 
     <property>
         <name>path_logs</name>
         <value>/opt/elasticsearch/logs</value>
+        <display-name>Log path</display-name>
         <description>Path to directory where to store the logs</description>
     </property>
 
@@ -47,6 +51,7 @@
     <property>
         <name>bootstrap_memory_lock</name>
         <value>true</value>
+        <display-name>Lock the memory</display-name>
         <description>Lock the memory on startup</description>
     </property>
 
@@ -54,12 +59,14 @@
     <property>
         <name>network_host</name>
         <value>{{hostname}}</value>
+        <display-name>Host name</display-name>
         <description>Set the bind address to a specific IP (IPv4 or IPv6)</description>
     </property>
 
     <property>
         <name>http_port</name>
         <value>9200</value>
+        <display-name>Http port</display-name>
         <description>Set a custom port for HTTP</description>
     </property>
 
@@ -67,19 +74,23 @@
     <property>
         <name>discovery_zen_ping_unicast_hosts</name>
         <value>127.0.0.1</value>
+        <display-name>Discovery zen ping unicast hosts</display-name>
         <description>Pass an initial list of hosts to perform discovery when new node is started</description>
     </property>
 
     <property>
         <name>discovery_zen_minimum_master_nodes</name>
         <value>3</value>
-        <description>Prevent the "split brain" by configuring the majority of nodes (total number of nodes / 2 + 1)</description>
+        <display-name>Discovery zen minimum master nodes</display-name>
+        <description>Prevent the "split brain" by configuring the majority of nodes (total number of nodes / 2 + 1)
+        </description>
     </property>
 
     <!-- Gateway -->
     <property>
         <name>gateway_recover_after_nodes</name>
         <value>3</value>
+        <display-name>Gateway recover after nodes</display-name>
         <description>Block initial recovery after a full cluster restart until N nodes are started</description>
     </property>
 
@@ -87,48 +98,71 @@
     <property>
         <name>node_max_local_storage_nodes</name>
         <value>1</value>
+        <display-name>Node max local storage nodes</display-name>
         <description>Disable starting multiple nodes on a single system</description>
     </property>
 
     <property>
         <name>action_destructive_requires_name</name>
         <value>true</value>
+        <display-name>Action destructive requires name</display-name>
         <description>Require explicit names when deleting indices</description>
     </property>
 
     <property>
         <name>xpack_security_enabled</name>
         <value>true</value>
+        <display-name>Xpack security</display-name>
         <description>Enable X-Pack security module</description>
     </property>
     <property>
         <name>xpack_security_ssl_enabled</name>
         <value>true</value>
+        <display-name>Xpack security SSL</display-name>
         <description>Elasticsearch SSL support</description>
     </property>
     <property>
         <name>xpack_security_ssl_key</name>
         <value>host_ssl.key</value>
+        <display-name>Xpack security SSL key</display-name>
         <description>Elasticsearch SSL key</description>
     </property>
     <property>
         <name>xpack_security_ssl_cert</name>
         <value>host_ssl.crt</value>
+        <display-name>Xpack security SSL cert</display-name>
         <description>Elasticsearch SSL certificate</description>
     </property>
     <property>
         <name>xpack_security_ssl_cert_authority</name>
         <value>ca.crt</value>
+        <display-name>Xpack security SSL cert authority</display-name>
         <description>Elasticsearch SSL certificate authority</description>
     </property>
     <property>
         <name>xpack_security_ad_domain_name</name>
         <value>ad.com</value>
+        <display-name>Xpack security ad domain</display-name>
         <description>Elasticsearch AD support</description>
     </property>
     <property>
         <name>xpack_security_ad_url</name>
         <value>ldap://ad.com:389</value>
+        <display-name>Xpack security ad url</display-name>
         <description>Elasticsearch AD url</description>
     </property>
+    <property>
+        <name>xpack_security_ssl_certs_template</name>
+        <display-name>Template for instances.yml</display-name>
+        <value>
+            instances:
+            - name: {{hostname}}
+        </value>
+        <description>Template for instances.yml</description>
+        <value-attributes>
+            <type>content</type>
+        </value-attributes>
+        <on-ambari-upgrade add="true"/>
+    </property>
+
 </configuration>

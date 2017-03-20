@@ -70,11 +70,11 @@ gateway_recover_after_nodes = config['configurations']['elastic-config']['gatewa
 node_max_local_storage_nodes = config['configurations']['elastic-config']['node_max_local_storage_nodes']
 
 action_destructive_requires_name = str(config['configurations']['elastic-config']['action_destructive_requires_name']).lower()
-
+xpack_security_ssl_certs_template = config['configurations']['elastic-config']['xpack_security_ssl_certs_template']
 xpack_security_ssl_enabled=str(config['configurations']['elastic-config']['xpack_security_ssl_enabled']).lower()
-xpack_security_ssl_key=str(config['configurations']['elastic-config']['xpack_security_ssl_key'])
-xpack_security_ssl_cert=str(config['configurations']['elastic-config']['xpack_security_ssl_cert'])
-xpack_security_ssl_cert_authority=str(config['configurations']['elastic-config']['xpack_security_ssl_cert_authority'])
+xpack_security_ssl_key=str(config['configurations']['elastic-config']['xpack_security_ssl_key']).replace('{{hostname}}',hostname)
+xpack_security_ssl_cert=str(config['configurations']['elastic-config']['xpack_security_ssl_cert']).replace('{{hostname}}',hostname)
+xpack_security_ssl_cert_authority=str(config['configurations']['elastic-config']['xpack_security_ssl_cert_authority']).replace('{{hostname}}',hostname)
 xpack_security_ad_domain_name=str(config['configurations']['elastic-config']['xpack_security_ad_domain_name'])
 xpack_security_ad_url=str(config['configurations']['elastic-config']['xpack_security_ad_url'])
 xpack_security_enabled = str(config['configurations']['elastic-config']['xpack_security_enabled']).lower()
