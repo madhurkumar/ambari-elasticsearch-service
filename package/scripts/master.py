@@ -98,6 +98,16 @@ class Master(Script):
         cmd = format("cd {elastic_base_dir}/config/x-pack; unzip certificate-bundle.zip")
         Execute(cmd)
 
+        security_role_mapping_template_content = InlineTemplate(params.security_role_mapping_template)
+        File(format("{{elastic_base_dir}}/config/x-pack/role_mapping.yml"),
+             content=security_role_mapping_template_content,
+             owner=params.elastic_user, group=params.elastic_group)
+
+        security_roles_template_content = InlineTemplate(params.security_roles_template)
+        File(format("{{elastic_base_dir}}/config/x-pack/roles.yml"),
+             content=security_roles_template_content,
+             owner=params.elastic_user, group=params.elastic_group)
+
         # Ensure all files owned by elasticsearch user
         cmd = format("chown -R {elastic_user}:{elastic_group} {elastic_base_dir}")
         Execute(cmd)

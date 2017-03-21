@@ -164,5 +164,43 @@
         </value-attributes>
         <on-ambari-upgrade add="true"/>
     </property>
+    <property>
+        <name>security_role_mapping_template</name>
+        <display-name>Template for role_mapping.yml</display-name>
+        <value>
+            # Role mapping configuration file which has elasticsearch roles as keys
+            # that map to one or more user or group distinguished names
 
+            #roleA: this is an elasticsearch role
+            # - groupA-DN this is a group distinguished name
+            # - groupB-DN
+            # - user1-DN this is the full user distinguished name
+
+            #power_user:
+            # - "cn=admins,dc=example,dc=com"
+            #user:
+            # - "cn=users,dc=example,dc=com"
+            # - "cn=admins,dc=example,dc=com"
+            # - "cn=John Doe,cn=other users,dc=example,dc=com"
+        </value>
+        <description>Template for role_mapping.yml</description>
+        <value-attributes>
+            <type>content</type>
+        </value-attributes>
+        <on-ambari-upgrade add="true"/>
+    </property>
+    <property>
+        <name>security_roles_template</name>
+        <display-name>Template for roles.yml</display-name>
+        <value>
+            # The default roles file is empty as the preferred method of defining roles is
+            # through the API/UI. File based roles are useful in error scenarios when the
+            # API based roles may not be available.
+        </value>
+        <description>Template for roles.yml</description>
+        <value-attributes>
+            <type>content</type>
+        </value-attributes>
+        <on-ambari-upgrade add="true"/>
+    </property>
 </configuration>

@@ -70,6 +70,8 @@ gateway_recover_after_nodes = config['configurations']['elastic-config']['gatewa
 node_max_local_storage_nodes = config['configurations']['elastic-config']['node_max_local_storage_nodes']
 
 action_destructive_requires_name = str(config['configurations']['elastic-config']['action_destructive_requires_name']).lower()
+security_role_mapping_template=config['configurations']['elastic-config']['security_role_mapping_template']
+security_roles_template=config['configurations']['elastic-config']['security_roles_template']
 xpack_security_ssl_certs_template = config['configurations']['elastic-config']['xpack_security_ssl_certs_template']
 xpack_security_ssl_enabled=str(config['configurations']['elastic-config']['xpack_security_ssl_enabled']).lower()
 xpack_security_ssl_key=str(config['configurations']['elastic-config']['xpack_security_ssl_key']).replace('{{hostname}}',hostname)
