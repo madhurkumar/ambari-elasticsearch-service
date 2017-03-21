@@ -80,40 +80,45 @@ class Master(Script):
         cmd = format("cd {elastic_base_dir}; tar -xf elasticsearch.tar.gz --strip-components=1")
         Execute(cmd, user=params.elastic_user)
 
-        # Download Elasticsearch
-        cmd = format("cd {elastic_base_dir}; wget {xpack_download} -O x-pack.zip -a {elastic_install_log}")
-        Execute(cmd, user=params.elastic_user)
+        if params.xpack_security_enabled == 'true':
+            # Download x-pack
+            cmd = format("cd {elastic_base_dir}; wget {xpack_download} -O x-pack.zip -a {elastic_install_log}")
+            Execute(cmd, user=params.elastic_user)
 
-        # Install X-Pack plugin
-        cmd = format("cd {elastic_base_dir}; bin/elasticsearch-plugin install file://{elastic_base_dir}/x-pack.zip")
-        Execute(cmd)
+            # Install X-Pack plugin
+            cmd = format("cd {elastic_base_dir}; bin/elasticsearch-plugin install file://{elastic_base_dir}/x-pack.zip")
+            Execute(cmd)
 
-        xpack_security_ssl_certs_content = InlineTemplate(params.xpack_security_ssl_certs_template)
-        File(format("{elastic_base_dir}/config/x-pack/instances.yml"), content=xpack_security_ssl_certs_content,
-             owner=params.elastic_user, group=params.elastic_group)
+            xpack_security_ssl_certs_content = InlineTemplate(params.xpack_security_ssl_certs_template)
+            File(format("{elastic_base_dir}/config/x-pack/instances.yml"), content=xpack_security_ssl_certs_content,
+                 owner=params.elastic_user, group=params.elastic_group)
 
-        cmd = format("cd {elastic_base_dir}; bin/x-pack/certgen --in instances.yml --out certificate-bundle.zip")
-        Execute(cmd)
+            cmd = format("cd {elastic_base_dir}; bin/x-pack/certgen --in instances.yml --out certificate-bundle.zip")
+            Execute(cmd)
 
-        cmd = format("cd {elastic_base_dir}/config/x-pack; unzip certificate-bundle.zip")
-        Execute(cmd)
+            cmd = format("cd {elastic_base_dir}/config/x-pack; unzip certificate-bundle.zip")
+            Execute(cmd)
 
-        security_role_mapping_template_content = InlineTemplate(params.security_role_mapping_template)
-        File(format("{elastic_base_dir}/config/x-pack/role_mapping.yml"),
-             content=security_role_mapping_template_content,
-             owner=params.elastic_user, group=params.elastic_group)
+            security_role_mapping_template_content = InlineTemplate(params.security_role_mapping_template)
+            File(format("{elastic_base_dir}/config/x-pack/role_mapping.yml"),
+                 content=security_role_mapping_template_content,
+                 owner=params.elastic_user, group=params.elastic_group)
 
-        security_roles_template_content = InlineTemplate(params.security_roles_template)
-        File(format("{elastic_base_dir}/config/x-pack/roles.yml"),
-             content=security_roles_template_content,
-             owner=params.elastic_user, group=params.elastic_group)
+            security_roles_template_content = InlineTemplate(params.security_roles_template)
+            File(format("{elastic_base_dir}/config/x-pack/roles.yml"),
+                 content=security_roles_template_content,
+                 owner=params.elastic_user, group=params.elastic_group)
+
+            # Remove Elasticsearch installation file
+            cmd = format("cd {elastic_base_dir}; rm x-pack.zip")
+            Execute(cmd, user=params.elastic_user)
 
         # Ensure all files owned by elasticsearch user
         cmd = format("chown -R {elastic_user}:{elastic_group} {elastic_base_dir}")
         Execute(cmd)
 
         # Remove Elasticsearch installation file
-        cmd = format("cd {elastic_base_dir}; rm elasticsearch.tar.gz x-pack.zip")
+        cmd = format("cd {elastic_base_dir}; rm elasticsearch.tar.gz")
         Execute(cmd, user=params.elastic_user)
 
         Execute('echo "Install complete"')

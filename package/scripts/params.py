@@ -45,14 +45,7 @@ node_attr_rack = config['configurations']['elastic-config']['node_attr_rack']
 path_data = config['configurations']['elastic-config']['path_data']
 path_logs = config['configurations']['elastic-config']['path_logs']
 
-bootstrap_memory_lock = str(config['configurations']['elastic-config']['bootstrap_memory_lock'])
-
-# Elasticsearch expetcs that boolean values to be true or false and will generate an error if you use True or False.
-if bootstrap_memory_lock == 'True':
-    bootstrap_memory_lock = 'true'
-else:
-    bootstrap_memory_lock = 'false'
-
+bootstrap_memory_lock = str(config['configurations']['elastic-config']['bootstrap_memory_lock']).lower()
 network_host = config['configurations']['elastic-config']['{network_host']
 http_port = config['configurations']['elastic-config']['http_port']
 

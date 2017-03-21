@@ -111,13 +111,13 @@
 
     <property>
         <name>xpack_security_enabled</name>
-        <value>true</value>
+        <value>false</value>
         <display-name>Xpack security</display-name>
         <description>Enable X-Pack security module</description>
     </property>
     <property>
         <name>xpack_security_ssl_enabled</name>
-        <value>true</value>
+        <value>false</value>
         <display-name>Xpack security SSL</display-name>
         <description>Elasticsearch SSL support</description>
     </property>
