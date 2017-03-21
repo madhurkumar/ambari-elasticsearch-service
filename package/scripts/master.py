@@ -89,7 +89,7 @@ class Master(Script):
         Execute(cmd)
 
         xpack_security_ssl_certs_content = InlineTemplate(params.xpack_security_ssl_certs_template)
-        File(format("{{elastic_base_dir}}/config/x-pack/instances.yml"), content=xpack_security_ssl_certs_content,
+        File(format("{elastic_base_dir}/config/x-pack/instances.yml"), content=xpack_security_ssl_certs_content,
              owner=params.elastic_user, group=params.elastic_group)
 
         cmd = format("cd {elastic_base_dir}; bin/x-pack/certgen --in instances.yml --out certificate-bundle.zip")
@@ -99,12 +99,12 @@ class Master(Script):
         Execute(cmd)
 
         security_role_mapping_template_content = InlineTemplate(params.security_role_mapping_template)
-        File(format("{{elastic_base_dir}}/config/x-pack/role_mapping.yml"),
+        File(format("{elastic_base_dir}/config/x-pack/role_mapping.yml"),
              content=security_role_mapping_template_content,
              owner=params.elastic_user, group=params.elastic_group)
 
         security_roles_template_content = InlineTemplate(params.security_roles_template)
-        File(format("{{elastic_base_dir}}/config/x-pack/roles.yml"),
+        File(format("{elastic_base_dir}/config/x-pack/roles.yml"),
              content=security_roles_template_content,
              owner=params.elastic_user, group=params.elastic_group)
 
