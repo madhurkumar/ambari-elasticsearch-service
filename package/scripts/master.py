@@ -78,40 +78,27 @@ class Master(Script):
 
         # Install Elasticsearch
         cmd = format("cd {elastic_base_dir}; tar -xf elasticsearch.tar.gz --strip-components=1")
+        Execute(cmd, user=params.elastic_user)  # Download x-pack
+        cmd = format("cd {elastic_base_dir}; wget {xpack_download} -O x-pack.zip -a {elastic_install_log}")
         Execute(cmd, user=params.elastic_user)
 
-        if params.xpack_security_enabled == 'true':
-            # Download x-pack
-            cmd = format("cd {elastic_base_dir}; wget {xpack_download} -O x-pack.zip -a {elastic_install_log}")
-            Execute(cmd, user=params.elastic_user)
+        # Install X-Pack plugin
+        cmd = format("cd {elastic_base_dir}; bin/elasticsearch-plugin install file://{elastic_base_dir}/x-pack.zip")
+        Execute(cmd)
 
-            # Install X-Pack plugin
-            cmd = format("cd {elastic_base_dir}; bin/elasticsearch-plugin install file://{elastic_base_dir}/x-pack.zip")
-            Execute(cmd)
+        xpack_security_ssl_certs_content = InlineTemplate(params.xpack_security_ssl_certs_template)
+        File(format("{elastic_base_dir}/config/x-pack/instances.yml"), content=xpack_security_ssl_certs_content,
+             owner=params.elastic_user, group=params.elastic_group)
 
-            xpack_security_ssl_certs_content = InlineTemplate(params.xpack_security_ssl_certs_template)
-            File(format("{elastic_base_dir}/config/x-pack/instances.yml"), content=xpack_security_ssl_certs_content,
-                 owner=params.elastic_user, group=params.elastic_group)
+        cmd = format("cd {elastic_base_dir}; bin/x-pack/certgen --in instances.yml --out certificate-bundle.zip")
+        Execute(cmd)
 
-            cmd = format("cd {elastic_base_dir}; bin/x-pack/certgen --in instances.yml --out certificate-bundle.zip")
-            Execute(cmd)
+        cmd = format("cd {elastic_base_dir}/config/x-pack; unzip certificate-bundle.zip")
+        Execute(cmd)
 
-            cmd = format("cd {elastic_base_dir}/config/x-pack; unzip certificate-bundle.zip")
-            Execute(cmd)
-
-            security_role_mapping_template_content = InlineTemplate(params.security_role_mapping_template)
-            File(format("{elastic_base_dir}/config/x-pack/role_mapping.yml"),
-                 content=security_role_mapping_template_content,
-                 owner=params.elastic_user, group=params.elastic_group)
-
-            security_roles_template_content = InlineTemplate(params.security_roles_template)
-            File(format("{elastic_base_dir}/config/x-pack/roles.yml"),
-                 content=security_roles_template_content,
-                 owner=params.elastic_user, group=params.elastic_group)
-
-            # Remove Elasticsearch installation file
-            cmd = format("cd {elastic_base_dir}; rm x-pack.zip")
-            Execute(cmd, user=params.elastic_user)
+        # Remove Elasticsearch installation file
+        cmd = format("cd {elastic_base_dir}; rm x-pack.zip")
+        Execute(cmd, user=params.elastic_user)
 
         # Ensure all files owned by elasticsearch user
         cmd = format("chown -R {elastic_user}:{elastic_group} {elastic_base_dir}")
@@ -133,12 +120,28 @@ class Master(Script):
 
         configurations = params.config['configurations']['elastic-config']
 
+        xpack_security_ssl_enabled = str(configurations['xpack_security_ssl_enabled']).lower()
+
+        elasticsearch_template_yml = "elasticsearch.yml.j2"
+        if xpack_security_ssl_enabled == 'true':
+            elasticsearch_template_yml = "elasticsearch.xpack.ssl.yml.j2"
+
         File(format("{elastic_conf_dir}/elasticsearch.yml"),
-             content=Template("elasticsearch.yml.j2",
+             content=Template(elasticsearch_template_yml,
                               configurations=configurations),
              owner=params.elastic_user,
              group=params.elastic_group
              )
+
+        security_role_mapping_template_content = InlineTemplate(configurations['security_role_mapping_template'])
+        File(format("{elastic_conf_dir}/x-pack/role_mapping.yml"),
+             content=security_role_mapping_template_content,
+             owner=params.elastic_user, group=params.elastic_group)
+
+        security_roles_template_content = InlineTemplate(params.security_roles_template)
+        File(format("{elastic_conf_dir}/x-pack/roles.yml"),
+             content=security_roles_template_content,
+             owner=params.elastic_user, group=params.elastic_group)
 
         # Install HEAD and HQ puglins - these plugins are not currently supported by ES 5.x
         # cmd = format("{elastic_base_dir}/bin/elasticsearch-plugin install mobz/elasticserach-head")
