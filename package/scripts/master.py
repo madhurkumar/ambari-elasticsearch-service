@@ -86,7 +86,10 @@ class Master(Script):
         cmd = format("cd {elastic_base_dir}; bin/elasticsearch-plugin install file://{elastic_base_dir}/x-pack.zip")
         Execute(cmd)
 
-        xpack_security_ssl_certs_content = InlineTemplate(params.xpack_security_ssl_certs_template)
+        configurations = params.config['configurations']['elastic-config']
+
+        xpack_security_ssl_certs_content = InlineTemplate(params.xpack_security_ssl_certs_template,
+                                                          configurations=configurations)
         File(format("{elastic_base_dir}/config/x-pack/instances.yml"), content=xpack_security_ssl_certs_content,
              owner=params.elastic_user, group=params.elastic_group)
 
@@ -120,25 +123,21 @@ class Master(Script):
 
         configurations = params.config['configurations']['elastic-config']
 
-        xpack_security_ssl_enabled = str(configurations['xpack_security_ssl_enabled']).lower()
-
-        elasticsearch_template_yml = "elasticsearch.yml.j2"
-        if xpack_security_ssl_enabled == 'true':
-            elasticsearch_template_yml = "elasticsearch.xpack.ssl.yml.j2"
-
+        elasticsearch_template_yml_content = InlineTemplate(configurations['elasticsearch_yml_template'],
+                                                    configurations=configurations)
         File(format("{elastic_conf_dir}/elasticsearch.yml"),
-             content=Template(elasticsearch_template_yml,
-                              configurations=configurations),
+             content=elasticsearch_template_yml_content,
              owner=params.elastic_user,
              group=params.elastic_group
              )
 
-        security_role_mapping_template_content = InlineTemplate(configurations['security_role_mapping_template'])
+        security_role_mapping_template_content = InlineTemplate(configurations['security_role_mapping_template'],
+                                                                configurations=configurations)
         File(format("{elastic_conf_dir}/x-pack/role_mapping.yml"),
              content=security_role_mapping_template_content,
              owner=params.elastic_user, group=params.elastic_group)
 
-        security_roles_template_content = InlineTemplate(params.security_roles_template)
+        security_roles_template_content = InlineTemplate(params.security_roles_template, configurations=configurations)
         File(format("{elastic_conf_dir}/x-pack/roles.yml"),
              content=security_roles_template_content,
              owner=params.elastic_user, group=params.elastic_group)

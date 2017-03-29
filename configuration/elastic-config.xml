@@ -18,145 +18,104 @@
 
     <!-- Cluster -->
     <property>
-        <name>cluster_name</name>
-        <value>my_es_cluster</value>
-        <display-name>Cluster name</display-name>
-        <description>Use a descriptive name for your cluster</description>
-    </property>
+        <name>elasticsearch_yml_template</name>
+        <display-name>Elasticsearch yml template</display-name>
+        <value>
+# ======================== Elasticsearch Configuration =========================
+#
+# NOTE: Elasticsearch comes with reasonable defaults for most settings.
+#       Before you set out to tweak and tune the configuration, make sure you
+#       understand what are you trying to accomplish and the consequences.
+#
+# The primary way of configuring a node is via this file. This template lists
+# the most important settings you may want to configure for a production cluster.
 
-    <!-- Node -->
-    <property>
-        <name>node_attr_rack</name>
-        <value>rack01</value>
-        <display-name>Rack name</display-name>
-        <description>Add custom attributes to the node</description>
-    </property>
+# ---------------------------------- Cluster -----------------------------------
+# Use a descriptive name for your cluster:
+cluster.name: es_cluster_01
 
-    <!-- Paths -->
-    <property>
-        <name>path_data</name>
-        <value>/opt/elasticsearch/data</value>
-        <display-name>Data path</display-name>
-        <description>Path to directory where to store the data (separate multiple locations by comma)</description>
-    </property>
+# ------------------------------------ Node ------------------------------------
+# Use a descriptive name for the node:
+node.name: {{hostname}}
 
-    <property>
-        <name>path_logs</name>
-        <value>/opt/elasticsearch/logs</value>
-        <display-name>Log path</display-name>
-        <description>Path to directory where to store the logs</description>
-    </property>
+# Add custom attributes to the node:
+node.attr.rack: rack01
 
-    <!-- Memory -->
-    <property>
-        <name>bootstrap_memory_lock</name>
-        <value>true</value>
-        <display-name>Lock the memory</display-name>
-        <description>Lock the memory on startup</description>
-    </property>
+node.master: true
+node.data: true
+node.ingest: true
 
-    <!-- Network -->
-    <property>
-        <name>network_host</name>
-        <value>{{hostname}}</value>
-        <display-name>Host name</display-name>
-        <description>Set the bind address to a specific IP (IPv4 or IPv6)</description>
-    </property>
+# ----------------------------------- Paths ------------------------------------
+# Path to directory where to store the data (separate multiple locations by comma):
+path.data: {{elastic_base_dir}}/data
 
-    <property>
-        <name>http_port</name>
-        <value>9200</value>
-        <display-name>Http port</display-name>
-        <description>Set a custom port for HTTP</description>
-    </property>
+# Path to log files:
+path.logs: {{elastic_base_dir}}/logs
 
-    <!-- Discovery -->
-    <property>
-        <name>discovery_zen_ping_unicast_hosts</name>
-        <value>127.0.0.1</value>
-        <display-name>Discovery zen ping unicast hosts</display-name>
-        <description>Pass an initial list of hosts to perform discovery when new node is started</description>
-    </property>
+# ----------------------------------- Memory -----------------------------------
+# Lock the memory on startup:# Elasticsearch expects that boolean values to be true or false and will generate an error if you use True or False.
+bootstrap.memory_lock: true
 
-    <property>
-        <name>discovery_zen_minimum_master_nodes</name>
-        <value>3</value>
-        <display-name>Discovery zen minimum master nodes</display-name>
-        <description>Prevent the "split brain" by configuring the majority of nodes (total number of nodes / 2 + 1)
-        </description>
-    </property>
+# ---------------------------------- Network -----------------------------------
+# Set the bind address to a specific IP (IPv4 or IPv6):
+network.host: {{hostname}}
 
-    <!-- Gateway -->
-    <property>
-        <name>gateway_recover_after_nodes</name>
-        <value>3</value>
-        <display-name>Gateway recover after nodes</display-name>
-        <description>Block initial recovery after a full cluster restart until N nodes are started</description>
-    </property>
+# Set a custom port for HTTP:
+http.port: 9200
 
-    <!-- Various -->
-    <property>
-        <name>node_max_local_storage_nodes</name>
-        <value>1</value>
-        <display-name>Node max local storage nodes</display-name>
-        <description>Disable starting multiple nodes on a single system</description>
-    </property>
+# --------------------------------- Discovery ----------------------------------
+# Pass an initial list of hosts to perform discovery when new node is started:
+# The default list of hosts is ["127.0.0.1", "[::1]"]
+#discovery.zen.ping.unicast.hosts: {{discovery_zen_ping_unicast_hosts}}
 
-    <property>
-        <name>action_destructive_requires_name</name>
-        <value>true</value>
-        <display-name>Action destructive requires name</display-name>
-        <description>Require explicit names when deleting indices</description>
-    </property>
+# Prevent the "split brain" by configuring the majority of nodes (total number of nodes / 2 + 1):
+discovery.zen.minimum_master_nodes: 1
 
-    <property>
-        <name>xpack_security_enabled</name>
-        <value>false</value>
-        <display-name>Xpack security</display-name>
-        <description>Enable X-Pack security module</description>
-    </property>
-    <property>
-        <name>xpack_security_ssl_enabled</name>
-        <value>false</value>
-        <display-name>Xpack security SSL</display-name>
-        <description>Elasticsearch SSL support</description>
-    </property>
-    <property>
-        <name>xpack_security_ssl_key</name>
-        <value>host_ssl.key</value>
-        <display-name>Xpack security SSL key</display-name>
-        <description>Elasticsearch SSL key</description>
-    </property>
-    <property>
-        <name>xpack_security_ssl_cert</name>
-        <value>host_ssl.crt</value>
-        <display-name>Xpack security SSL cert</display-name>
-        <description>Elasticsearch SSL certificate</description>
-    </property>
-    <property>
-        <name>xpack_security_ssl_cert_authority</name>
-        <value>ca.crt</value>
-        <display-name>Xpack security SSL cert authority</display-name>
-        <description>Elasticsearch SSL certificate authority</description>
-    </property>
-    <property>
-        <name>xpack_security_ad_domain_name</name>
-        <value>ad.com</value>
-        <display-name>Xpack security ad domain</display-name>
-        <description>Elasticsearch AD support</description>
-    </property>
-    <property>
-        <name>xpack_security_ad_url</name>
-        <value>ldap://ad.com:389</value>
-        <display-name>Xpack security ad url</display-name>
-        <description>Elasticsearch AD url</description>
+# ---------------------------------- Gateway -----------------------------------
+# Block initial recovery after a full cluster restart until N nodes are started:
+gateway.recover_after_nodes: 1
+
+# ---------------------------------- Various -----------------------------------
+# Disable starting multiple nodes on a single system:
+node.max_local_storage_nodes: 1
+
+# Require explicit names when deleting indices:
+# Lock the memory on startup:# Elasticsearch expects that boolean values to be true or false and will generate an error if you use True or False.
+action.destructive_requires_name: true
+
+xpack.security.enabled: false
+xpack.ssl.key: {{elastic_base_dir}}/config/x-pack/{{hostname}}/{{hostname}}.key
+xpack.ssl.certificate: {{elastic_base_dir}}/config/x-pack/{{hostname}}/{{hostname}}.crt
+xpack.ssl.certificate_authorities:  {{elastic_base_dir}}/config/x-pack/ca/ca.crt
+xpack.security.transport.ssl.enabled: false
+xpack.security.http.ssl.enabled: false
+xpack:
+    security:
+        authc:
+            realms:
+                native1:
+                    type: native
+                    order: 0
+                ad1:
+                    type: active_directory
+                    order: 1
+                    domain_name: example.com
+                    url: ldap://example.com:port
+                    files:
+                        role_mapping:  {{elastic_base_dir}}/config/x-pack/role_mapping.yml
+                    unmapped_groups_as_roles: false
+    </value>
+    <description>Template for Elasticsearch yml</description>
+    <value-attributes>
+        <type>content</type>
+    </value-attributes>
     </property>
     <property>
         <name>xpack_security_ssl_certs_template</name>
         <display-name>Template for instances.yml</display-name>
         <value>
-            instances:
-            - name: {{hostname}}
+instances:
+- name: {{hostname}}
         </value>
         <description>Template for instances.yml</description>
         <value-attributes>
@@ -168,22 +127,36 @@
         <name>security_role_mapping_template</name>
         <display-name>Template for role_mapping.yml</display-name>
         <value>
-            # Role mapping configuration file which has elasticsearch roles as keys
-            # that map to one or more user or group distinguished names
+# Role mapping configuration file which has elasticsearch roles as keys
+# that map to one or more user or group distinguished names
 
-            #roleA: this is an elasticsearch role
-            # - groupA-DN this is a group distinguished name
-            # - groupB-DN
-            # - user1-DN this is the full user distinguished name
+#roleA: this is an elasticsearch role
+# - groupA-DN this is a group distinguished name
+# - groupB-DN
+# - user1-DN this is the full user distinguished name
 
-            #power_user:
-            # - "cn=admins,dc=example,dc=com"
-            #user:
-            # - "cn=users,dc=example,dc=com"
-            # - "cn=admins,dc=example,dc=com"
-            # - "cn=John Doe,cn=other users,dc=example,dc=com"
+#power_user:
+# - "cn=admins,dc=example,dc=com"
+#user:
+# - "cn=users,dc=example,dc=com"
+# - "cn=admins,dc=example,dc=com"
+# - "cn=John Doe,cn=other users,dc=example,dc=com"
         </value>
         <description>Template for role_mapping.yml</description>
+        <value-attributes>
+            <type>content</type>
+        </value-attributes>
+        <on-ambari-upgrade add="true"/>
+    </property>
+    <property>
+        <name>security_roles_template</name>
+        <display-name>Template for roles.yml</display-name>
+        <value>
+# The default roles file is empty as the preferred method of defining roles is
+# through the API/UI. File based roles are useful in error scenarios when the
+# API based roles may not be available.
+        </value>
+        <description>Template for roles.yml</description>
         <value-attributes>
             <type>content</type>
         </value-attributes>
